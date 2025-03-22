@@ -8,14 +8,14 @@ It will ...
 > [!NOTE]
 > Please check your disk free space before start.
 
-# Run in MacOS
+# Required packages in MacOS
 ```
 brew update
 brew upgrade
 brew install imagemagick zip unzip rar p7zip webp rar
 ```
 
-# Run in Ubuntu
+# Required packages in Ubuntu
 ```
 apt-get update -y
 apt-get upgrade -y
