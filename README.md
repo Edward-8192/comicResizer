@@ -5,8 +5,8 @@ It will ...
 1. Leverage the ImageMagick tool mogrify to resize and conver image files from jpg/jpeg/png/webp to jpg with "-resize x2800 -quality 80".
 2. Remove files with file extension ".txt" and ".url"
 
-[!NOTE]
-Please check your disk free space before start.
+> [!NOTE]
+> Please check your disk free space before start.
 
 # Run in MacOS
 ```
