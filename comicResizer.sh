@@ -8,10 +8,11 @@ set -euo pipefail  # 避免意外錯誤後繼續執行，並讓未定義變數�
 IFS=$'\n'
 CURRENTDATE="$(date +"%Y-%m-%d")"
 FOLDER="resize-$CURRENTDATE"
+FOLDERNAMEWITHTIME=$(date +%Y%m%d%H%M%S)
 mkdir -p "$FOLDER"
 TMP_DIR="./tmp"
 mkdir -p "$TMP_DIR"
-PROCESSED_DIR="./xxx"
+PROCESSED_DIR="./processed-$FOLDERNAMEWITHTIME"
 mkdir -p "$PROCESSED_DIR"
 
 RESIZEDCOUNT=0
