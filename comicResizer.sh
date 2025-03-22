@@ -12,7 +12,7 @@ FOLDERNAMEWITHTIME=$(date +%Y%m%d%H%M%S)
 mkdir -p "$FOLDER"
 TMP_DIR="./tmp"
 mkdir -p "$TMP_DIR"
-PROCESSED_DIR="./processed-$FOLDERNAMEWITHTIME"
+PROCESSED_DIR="./resizedOrigi-$FOLDERNAMEWITHTIME"
 mkdir -p "$PROCESSED_DIR"
 
 RESIZEDCOUNT=0
@@ -125,9 +125,12 @@ done
 COMPLETEDATE="$(date)"
 echo ""
 echo "---------------------------------------------------------------------"
-echo "Resizing completed: $RESIZEDCOUNT items at $COMPLETEDATE!"
+echo "Resize completed: $RESIZEDCOUNT items at $COMPLETEDATE!"
 echo "---------------------------------------------------------------------"
 echo "Output folder: $FOLDER"
+echo "---------------------------------------------------------------------"
+echo "Resized original files folder: $PROCESSED_DIR"
+echo "You can delete original files if you checked resize results."
 echo "---------------------------------------------------------------------"
 
 ELAPSED=$(( SECONDS - START_TIME ))
