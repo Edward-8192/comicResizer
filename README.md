@@ -1,5 +1,9 @@
 # comicResizer
-resize and archive my comic
+Resize and archive my comic.
+
+It will ...
+1. Leverage the ImageMagick tool mogrify to resize and conver image files from jpg/jpeg/png/webp to jpg with "-resize x2800 -quality 80".
+2. Remove files with file extension ".txt" and ".url"
 
 # Run in MacOS
 ```
