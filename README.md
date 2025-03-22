@@ -17,7 +17,7 @@ apt-get install imagemagick zip unzip unrar p7zip-full webp -y
 
 # Start to resize and archive
 
-1. Move your archived files (e.g. zip, rar, 7z...etc.) to the folder where the cript "comicResizer.sh" is.
+1. Move your archived files (e.g. zip, rar, 7z...etc.) to the folder where the script "comicResizer.sh" is.
 2. Run script
 ```
 ./comicResizer.sh
