@@ -3,7 +3,7 @@
 # 建議在腳本一開始時檢查所需的外部程式是否已安裝：
 # p7zip-full, imagemagick (mogrify、identify), zip, unrar, ditto (macOS) 等
 
-set -euo pipefail  # 避免意外錯誤後繼續執行，並讓未定義變數、管線錯誤立即中斷
+set -uo pipefail  # 避免意外錯誤後繼續執行，並讓未定義變數、管線錯誤立即中斷 => 移除 -e, 修改為不會中斷
 
 IFS=$'\n'
 CURRENTDATE="$(date +"%Y-%m-%d")"
@@ -72,48 +72,55 @@ function process_comic_archive() {
   local file="$1"
   local ext="$2"
 
-  # 去除副檔名，作為暫存資料夾名字
   local base_name="${file%.$ext}"
   local target_dir="$TMP_DIR/$base_name"
 
   mkdir -p "$target_dir"
-
   echo "Processing: $file"
 
-  # 依照副檔名選擇解壓指令
-  case "$ext" in
-    7z)
-      7z x "$file" -o"$target_dir"
-      ;;
-    rar|cbr)
-      unrar x -y "$file" "$target_dir"
-      ;;
-    zip|cbz)
-      # 若是 macOS，可能用 ditto；一般系統可用 unzip
-      if command -v ditto >/dev/null 2>&1; then
-        ditto -x -k --sequesterRsrc -rsrc "$file" "$target_dir"
-      else
-        unzip -q "$file" -d "$target_dir"
-      fi
-      ;;
-  esac
+  # 嘗試解壓縮，若失敗，移到 Error 資料夾並跳過
+  if ! {
+    case "$ext" in
+      7z)
+        7z x "$file" -o"$target_dir"
+        ;;
+      rar|cbr)
+        unrar x -y "$file" "$target_dir"
+        ;;
+      zip|cbz)
+        if command -v ditto >/dev/null 2>&1; then
+          ditto -x -k --sequesterRsrc -rsrc "$file" "$target_dir"
+        else
+          unzip -q "$file" -d "$target_dir"
+        fi
+        ;;
+    esac
+  }; then
+    echo "❌ Error: Failed to extract $file. Moving to Error folder."
+    mkdir -p "./Error"
+    mv "$file" "./Error/"
+    return 1
+  fi
 
-  # 圖片處理 + zip
+  # 正常流程：處理圖片與重新打包
   process_images_and_zip "$target_dir" "$base_name"
   mv "$file" "$PROCESSED_DIR"
 }
+
 
 
 #---------------------------------------
 # 主流程：針對各種壓縮檔案做處理
 #---------------------------------------
 for ext in 7z rar zip cbr cbz; do
-  # 用 shopt 處理萬一找不到匹配的情況
   shopt -s nullglob
   for file in *."$ext"; do
     [ -f "$file" ] || continue
-    process_comic_archive "$file" "$ext"
-    ((RESIZEDCOUNT++))
+    if process_comic_archive "$file" "$ext"; then
+      ((RESIZEDCOUNT++))
+    else
+      echo "⚠️  Skip failed file: $file"
+    fi
   done
   shopt -u nullglob
 done
