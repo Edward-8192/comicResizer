@@ -16,6 +16,7 @@ PROCESSED_DIR="./resizedOrigi-$FOLDERNAMEWITHTIME"
 mkdir -p "$PROCESSED_DIR"
 
 RESIZEDCOUNT=0
+ERRORCOUNT=0
 START_TIME=$SECONDS
 
 
@@ -120,6 +121,7 @@ for ext in 7z rar zip cbr cbz; do
       ((RESIZEDCOUNT++))
     else
       echo "⚠️  Skip failed file: $file"
+      ((ERRORCOUNT++))
     fi
   done
   shopt -u nullglob
@@ -133,6 +135,7 @@ COMPLETEDATE="$(date)"
 echo ""
 echo "---------------------------------------------------------------------"
 echo "Resize completed: $RESIZEDCOUNT items at $COMPLETEDATE!"
+echo "Resize failed: $ERRORCOUNT items"
 echo "---------------------------------------------------------------------"
 echo "Output folder: $FOLDER"
 echo "---------------------------------------------------------------------"
